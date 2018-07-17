@@ -1,4 +1,4 @@
-package hengda.harbinemud.schedule;
+package hengda.harbinemud.schedule.test;
 
 import org.apache.ibatis.annotations.Mapper;
 
