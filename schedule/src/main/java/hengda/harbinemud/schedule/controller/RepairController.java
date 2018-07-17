@@ -18,14 +18,14 @@ public class RepairController {
     /**
      * 5A，5G二级修
      *
-     * @param train 车型(?)
+     * @param model 车型(?)
      * @return
      */
-    @RequestMapping(value = "/second/{train}", method = RequestMethod.GET)
-    public Map<String, Object> requireSecond(@PathVariable("train") String train) {
+    @RequestMapping(value = "/second/{model}", method = RequestMethod.GET)
+    public Map<String, Object> requireSecond(@PathVariable("model") String model) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            List<ScheduleSecond> schedules = repairDao.findSecondByModel(train);
+            List<ScheduleSecond> schedules = repairDao.findSecondByModel(model);
             for (ScheduleSecond schedule : schedules) {
                 Date lastRepairDate = schedule.getLast_date();
                 long sustainDay = differenceOfDate(lastRepairDate);
