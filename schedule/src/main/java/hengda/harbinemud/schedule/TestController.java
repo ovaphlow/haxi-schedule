@@ -1,4 +1,4 @@
-package hengda.harbinemud.schedule.test;
+package hengda.harbinemud.schedule;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

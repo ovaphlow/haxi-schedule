@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="hengda.harbinemud.schedule.test.TestMapper">
+<mapper namespace="hengda.harbinemud.schedule.TestMapper">
 
     <select id="test" resultType="java.util.Map">
         SELECT * FROM schedule_source

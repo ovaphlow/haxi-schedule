@@ -2,71 +2,67 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="hengda.harbinemud.schedule.dao.IRepairDao">
+<mapper namespace="hengda.harbinemud.schedule.IRepairDao">
 
-    <select id="findSecondByModel" resultType="hengda.harbinemud.schedule.entity.ScheduleSecond">
+    <sql id="Base_Column_List">
+		id, uuid, counter, upload_time, file_name, p_xh, p_psj,
+		p_yys, model, train, update_time, total_mileage
+	</sql>
+
+    <select id="findSource" resultType="java.util.Map">
         select
-            *
+        <include refid="Base_Column_List"/>
         from
-            schedule_second as s1
+            schedule_source as s1
         where
             model = #{model}
             and counter = (
                 select
                     max(s2.counter)
                 from
-                    schedule_second as s2
+                    schedule_source as s2
                 where
                     s1.train=s2.train
             )
     </select>
 
-    <select id="findFlawByModel" resultType="hengda.harbinemud.schedule.entity.DetectionFlaw">
-        select * from schedule_detectionflaw as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_detectionflaw as s2 where s1.train=s2.train)
+    <select id="findByTrain" resultType="java.util.Map">
+        select
+            *
+        from
+            ${tableName}
+        where
+            train = #{train}
+            order by update_time desc limit 1
     </select>
 
-    <select id="findTurnByModel" resultType="hengda.harbinemud.schedule.entity.DetectionFlaw">
-        select * from schedule_turnrepair as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_turnrepair as s2 where s1.train=s2.train)
+    <select id="findMileage" resultType="String">
+        select
+            total_mileage
+        from
+            schedule_source
+        where
+            train = #{train}
+            and counter = (
+                select
+                    max(counter)
+                from
+                    schedule_source
+                where
+                     train = #{train}
+            )
     </select>
 
-    <select id="findShaftByModel" resultType="hengda.harbinemud.schedule.entity.DetectionFlaw">
-        select * from schedule_shaft as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_shaft as s2 where s1.train=s2.train)
-    </select>
-
-    <select id="findM4ByModel" resultType="hengda.harbinemud.schedule.entity.DetectionFlaw">
-        select * from schedule_m4 as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_m4 as s2 where s1.train=s2.train)
-    </select>
-
-    <select id="findbgSecondByModel" resultType="hengda.harbinemud.schedule.entity.ScheduleSecond">
-        select * from schedule_bgsecond as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_bgsecond as s2 where s1.train=s2.train)
-    </select>
-
-    <select id="findbgTurnByModel" resultType="hengda.harbinemud.schedule.entity.DetectionFlaw">
-        select * from schedule_turnbgrepair as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_turnbgrepair as s2 where s1.train=s2.train)
-    </select>
-
-    <select id="findbgI2ByModel" resultType="hengda.harbinemud.schedule.entity.ScheduleSecond">
-        select * from schedule_I2repair as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_I2repair as s2 where s1.train=s2.train)
-    </select>
-
-    <select id="findbgM3ByModel" resultType="hengda.harbinemud.schedule.entity.DetectionFlaw">
-        select * from schedule_m3bgrepair as s1
-        where model=#{model}
-        and counter=(select max(s2.counter) from schedule_m3bgrepair as s2 where s1.train=s2.train)
-    </select>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="java.util.Map">
+        insert into
+        ${tableName}
+        <foreach collection="params.keys" item="key" open="(" close=")" separator="," >
+            ${key}
+        </foreach>
+        values
+        <foreach collection="params.keys"  item="key" open="(" close=")" separator=",">
+            #{params[${key}]}
+        </foreach>
+    </insert>
 
 </mapper>
