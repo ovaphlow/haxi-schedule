@@ -133,6 +133,103 @@ public class RepairController {
     }
 
     /**
+     * 380BG二级修探伤
+     *
+     * @param model 车型
+     * @return
+     */
+    @RequestMapping(value = "/bgsecond/{model}", method = RequestMethod.GET)
+    public Map<String, Object> bgsecond(@PathVariable("model") String model) {
+        Map<String, Object> result = compute(model, "schedule_bgsecond", true);
+        return result;
+    }
+
+    /**
+     * 380BG设置二级修探伤
+     *
+     * @param train 车组号
+     * @return
+     */
+    @RequestMapping(value = "/insertbgSecond/{train}", method = RequestMethod.GET)
+    public Map<String, Object> insertbgSecond(@PathVariable("train") String train) {
+        Map<String, Object> result = insertDate("schedule_bgsecond", train, 85000, 110000, 99);
+        return result;
+    }
+
+    /**
+     * 380BG I2修
+     *
+     * @param model 车型
+     * @return
+     */
+    @RequestMapping(value = "/i2bgRepair/{model}", method = RequestMethod.GET)
+    public Map<String, Object> i2bgRepair(@PathVariable("model") String model) {
+        Map<String, Object> result = compute(model, "schedule_i2repair", true);
+        return result;
+    }
+
+    /**
+     * 380BG设置I2修
+     *
+     * @param train 车组号
+     * @return
+     */
+    @RequestMapping(value = "/inserti2bgRepair/{train}", method = RequestMethod.GET)
+    public Map<String, Object> inserti2bgRepair(@PathVariable("train") String train) {
+        Map<String, Object> result = insertDate("schedule_i2repair", train, 15000, 20000, 20);
+        return result;
+    }
+
+    /**
+     * 380BG 镟修
+     *
+     * @param model 车型
+     * @return
+     */
+    @RequestMapping(value = "/turnbgRepair/{model}", method = RequestMethod.GET)
+    public Map<String, Object> turnbgRepair(@PathVariable("model") String model) {
+        Map<String, Object> result = compute(model, "schedule_turnbgrepair", false);
+        return result;
+    }
+
+    /**
+     * 380BG设置镟修
+     *
+     * @param train 车组号
+     * @return
+     */
+    @RequestMapping(value = "/insertturnbgRepair/{train}", method = RequestMethod.GET)
+    public Map<String, Object> insertturnbgRepair(@PathVariable("train") String train) {
+        Map<String, Object> result = insertDate("schedule_turnbgrepair", train, 170000, 200000, 0);
+        return result;
+    }
+
+    /**
+     * 380BG m3修
+     *
+     * @param model 车型
+     * @return
+     */
+    @RequestMapping(value = "/m3Repair/{model}", method = RequestMethod.GET)
+    public Map<String, Object> m3Repair(@PathVariable("model") String model) {
+        Map<String, Object> result = compute(model, "schedule_m3bgrepair", false);
+        return result;
+    }
+
+    /**
+     * 380BG设置m3修
+     *
+     * @param train 车组号
+     * @return
+     */
+    @RequestMapping(value = "/insertm3Repair/{train}", method = RequestMethod.GET)
+    public Map<String, Object> insertm3Repair(@PathVariable("train") String train) {
+        Map<String, Object> result = insertDate("schedule_m3bgrepair", train, 280000, 880000, 0);
+        return result;
+    }
+
+
+    /**
      * 计算修竣相关数据
      *
      * @param tableName 查询的修竣表名
