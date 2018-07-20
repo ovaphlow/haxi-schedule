@@ -20,7 +20,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/second/{model}", method = RequestMethod.GET)
     public Map<String, Object> second(@PathVariable("model") String model) {
-        Map<String, Object> result = compute(model, "schedule_second",  true);
+        Map<String, Object> result = compute(model, "schedule_second", true);
         return result;
     }
 
@@ -32,7 +32,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/detectionFlaw/{model}", method = RequestMethod.GET)
     public Map<String, Object> detectionFlaw(@PathVariable("model") String model) {
-        Map<String, Object> result = compute(model, "schedule_detectionflaw",  false);
+        Map<String, Object> result = compute(model, "schedule_detectionflaw", false);
         return result;
     }
 
@@ -80,7 +80,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/insertSecond/{train}", method = RequestMethod.GET)
     public Map<String, Object> insertSecond(@PathVariable("train") String train) {
-        Map<String, Object> result = insertDate("schedule_second", train, 40000, 55000,66);
+        Map<String, Object> result = insertDate("schedule_second", train, 40000, 55000, 66);
         return result;
     }
 
@@ -92,7 +92,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/insertDetectionFlaw/{train}", method = RequestMethod.GET)
     public Map<String, Object> insertDetectionFlaw(@PathVariable("train") String train) {
-        Map<String, Object> result = insertDate("schedule_detectionflaw", train, 168000, 198000,0);
+        Map<String, Object> result = insertDate("schedule_detectionflaw", train, 168000, 198000, 0);
         return result;
     }
 
@@ -104,7 +104,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/insertTurnRepair/{train}", method = RequestMethod.GET)
     public Map<String, Object> insertTurnRepair(@PathVariable("train") String train) {
-        Map<String, Object> result = insertDate("schedule_turnrepair", train, 230000, 250000,0);
+        Map<String, Object> result = insertDate("schedule_turnrepair", train, 230000, 250000, 0);
         return result;
     }
 
@@ -116,7 +116,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/insertShaft/{train}", method = RequestMethod.GET)
     public Map<String, Object> insertShaft(@PathVariable("train") String train) {
-        Map<String, Object> result = insertDate("schedule_shaft", train, 510000, 660000,0);
+        Map<String, Object> result = insertDate("schedule_shaft", train, 510000, 660000, 0);
         return result;
     }
 
@@ -128,7 +128,7 @@ public class RepairController {
      */
     @RequestMapping(value = "/insertM4/{train}", method = RequestMethod.GET)
     public Map<String, Object> insertM4(@PathVariable("train") String train) {
-        Map<String, Object> result = insertDate("schedule_m4", train, 510000, 660000,0);
+        Map<String, Object> result = insertDate("schedule_m4", train, 510000, 660000, 0);
         return result;
     }
 
@@ -233,23 +233,23 @@ public class RepairController {
      * 计算修竣相关数据
      *
      * @param tableName 查询的修竣表名
-     * @param train 车组号
-     * @param alarm 报警里程
-     * @param next 必修里程
-     * @param days 必修天数
+     * @param train     车组号
+     * @param alarm     报警里程
+     * @param next      必修里程
+     * @param days      必修天数
      * @return 计算结果
      */
     public Map<String, Object> insertDate(String tableName,
-                                          String train, int alarm, int next, int days) {
+            String train, int alarm, int next, int days) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             String totalMileage = repairDao.findMileage(train);
-            if (totalMileage != null){
+            if (totalMileage != null) {
                 Map<String, Object> newData = new HashMap<String, Object>();
                 Date repairDate = new Date();
-                newData.put("last_date",repairDate);
-                newData.put("train",train);
-                newData.put("last_mileage",totalMileage);
+                newData.put("last_date", repairDate);
+                newData.put("train", train);
+                newData.put("last_mileage", totalMileage);
                 int alarmMileage = Integer.valueOf(totalMileage) + alarm;
                 newData.put("alarm_mileage", String.valueOf(alarmMileage));
                 int nextMileage = Integer.valueOf(totalMileage) + next;
@@ -258,13 +258,13 @@ public class RepairController {
                     Date next_date = addDayOfDate(repairDate, days);
                     newData.put("next_date", next_date);
                 }
-                int insertResult = repairDao.insert(tableName,newData);
+                int insertResult = repairDao.insert(tableName, newData);
                 if (insertResult > 0)
                     result.put("message", "");
                 else
                     result.put("message", "插入失败");
                 result.put("content", "");
-            }else {
+            } else {
                 result.put("content", "");
                 result.put("message", "数据库中没有该车组里程数据");
             }
@@ -277,16 +277,15 @@ public class RepairController {
     }
 
 
-
     /**
      * 计算
      *
-     * @param model 车型
-     * @param tableName 表名
+     * @param model      车型
+     * @param tableName  表名
      * @param isHaveDate 有无天数限制
      * @return 计算结果
      */
-    public Map<String, Object> compute(String model, String tableName, boolean isHaveDate){
+    public Map<String, Object> compute(String model, String tableName, boolean isHaveDate) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             List<Map<String, Object>> tempMap = new ArrayList<Map<String, Object>>();
@@ -298,8 +297,8 @@ public class RepairController {
                     int totalMileage = Integer.valueOf((String) schedule.get("total_mileage"));
 
                     Map<String, Object> lastData = new HashMap<String, Object>();
-                    lastData = repairDao.findByTrain(tableName,train);
-                    if (lastData != null){
+                    lastData = repairDao.findByTrain(tableName, train);
+                    if (lastData != null) {
                         Date nowDate = new Date();
                         int lastMileage = Integer.valueOf((String) lastData.get("last_mileage"));
                         int nextMileage = Integer.valueOf((String) lastData.get("next_mileage"));
@@ -310,14 +309,14 @@ public class RepairController {
                             if (nowDate.before(nextRepairDate)) {
                                 compareMileageResult = compareMileage(totalMileage, alarmMileage, nextMileage);
                             } else {
-                                compareMileageResult = "必修";
+                                compareMileageResult = "必修（时间）";
                             }
                         } else {
                             compareMileageResult = compareMileage(totalMileage, alarmMileage, nextMileage);
                         }
 
                         lastData.put("remark", compareMileageResult);
-                        lastData.put("mileage_after_last",String.valueOf(totalMileage-lastMileage));
+                        lastData.put("mileage_after_last", String.valueOf(totalMileage - lastMileage));
                         //返回source其他字段
                         lastData.put("uuid", schedule.get("uuid"));
                         lastData.put("counter", schedule.get("counter"));
@@ -352,21 +351,20 @@ public class RepairController {
      *
      * @param totalMileage 总里程
      * @param alarmMileage 报警里程
-     * @param nextMileage 必修里程
+     * @param nextMileage  必修里程
      * @return 结果
      */
-    public String compareMileage(int totalMileage, int alarmMileage, int nextMileage){
+    public String compareMileage(int totalMileage, int alarmMileage, int nextMileage) {
         String result;
         if (totalMileage < alarmMileage) {
-            result="正常";
+            result = "正常";
         } else if (totalMileage < nextMileage) {
-            result="报警";
+            result = "报警（里程）";
         } else {
-            result="必修";
+            result = "必修（里程）";
         }
         return result;
     }
-
 
 
     /**
