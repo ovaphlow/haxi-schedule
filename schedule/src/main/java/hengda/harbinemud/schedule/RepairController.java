@@ -1,5 +1,7 @@
 package hengda.harbinemud.schedule;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,6 +10,8 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "/api/schedule")
 public class RepairController {
+
+    private Logger logger = LoggerFactory.getLogger(RestController.class);
 
     @Autowired
     private IRepairDao repairDao;
@@ -295,6 +299,7 @@ public class RepairController {
                 for (Map<String, Object> schedule : tempMap) {
                     String train = (String) schedule.get("train");
                     int totalMileage = Integer.valueOf((String) schedule.get("total_mileage"));
+//                    if (train.equals("5020") && tableName.equals("schedule_detectionflaw")) logger.info("{}", totalMileage);
 
                     Map<String, Object> lastData = new HashMap<String, Object>();
                     lastData = repairDao.findByTrain(tableName, train);
